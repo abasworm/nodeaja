@@ -1,5 +1,4 @@
-var $ = require('jquery');
-
+const $ = require('jquery');
 $(document).ready(function(e){
 	var chk = $('input');
 	$.each(chk ,function(index, val) {

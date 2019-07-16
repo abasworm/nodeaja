@@ -3,16 +3,47 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var sassMiddleware = require('node-sass-middleware');
+var browserify = require('browserify-middleware'); 
+const mongoose = require('mongoose');
+
+const dbConString = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+mongoose.connect(dbConString + '/todos');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var todoRouter = require('./routes/todo');
+var todoRouter = require('./routes/todo/index');
+var todoAPI = require('./routes/todo/api')
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+app.use (
+   	sassMiddleware({
+		src: __dirname + '/sass',
+		dest: __dirname + '/public',
+		debug: true,
+   	})
+);
+
+app.get('/javascripts/bundle.js', browserify('./client/script.js'));
+
+if (app.get('env') == 'development') {
+  var browserSync = require('browser-sync');
+  var config = {
+    files: ["public/**/*.{js,css}", "client/*.js", "sass/**/*.scss", "views/**/*.jade"],
+    logLevel: 'debug',
+    logSnippet: false,
+    reloadDelay: 3000,
+    reloadOnRestart: true
+  };
+  var bs = browserSync(config);
+  app.use(require('connect-browser-sync')(bs));
+}
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -23,6 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/todo', todoRouter);
+app.use('/api/todo', todoAPI);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

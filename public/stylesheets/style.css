@@ -1,16 +1,10 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
-}
-
-ul {
-	list-style-type:none;
-}
-
-.checked span {
-  text-decoration: line-through;
-}
+  font: 14px "Lucidia Grande", Helvetica, Arial, sans-serif; }
+  body a {
+    color: #00B7FF; }
+  body ul {
+    list-style-type: none; }
+    body ul .checked span {
+      text-decoration: line-through;
+      color: #FF0000; }
