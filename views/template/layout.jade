@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/public/stylesheets/style.css')
+    link(rel='stylesheet', href='/public/plugins/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/public/plugins/datatables/datatables.min.css')
+    link(rel='stylesheet', href='/public/plugins/fontawesome/css/all.min.css')
+    
+    script(src='/public/javascripts/jquery.js')
+  body
+    
+    include header
+    div.container-fluid
+      block content
+    
+    include footer
+    script(src='/javascripts/bundle.js')
+    script(src='/public/plugins/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/public/plugins/datatables/datatables.js')
+    script(src='/public/plugins/fontawesome/js/all.min.js')
+    script(src='/public/javascripts/funct.js')
+
+    
+
