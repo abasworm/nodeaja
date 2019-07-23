@@ -11,9 +11,12 @@ const dbConString = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 mongoose.connect(dbConString + '/todos');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
+var userRouter = require('./routes/user');
+var userAPI = require('./routes/user/api');
+
 var todoRouter = require('./routes/todo/index');
-var todoAPI = require('./routes/todo/api')
+var todoAPI = require('./routes/todo/api');
 
 var app = express();
 
@@ -49,10 +52,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public',express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
+app.use('/user', userRouter);
+app.use('/api/user', userAPI);
+
 app.use('/todo', todoRouter);
 app.use('/api/todo', todoAPI);
 

@@ -1,10 +1,11 @@
-body {
-  padding: 50px;
-  font: 14px "Lucidia Grande", Helvetica, Arial, sans-serif; }
-  body a {
-    color: #00B7FF; }
-  body ul {
-    list-style-type: none; }
-    body ul .checked span {
-      text-decoration: line-through;
-      color: #FF0000; }
+body section {
+  padding: 60px 0; }
+
+body section .section-title {
+  text-align: center;
+  color: #007b5e;
+  margin-bottom: 50px;
+  text-transform: uppercase; }
+
+body #footer {
+  background: #007b5e !important; }
