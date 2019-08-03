@@ -6,7 +6,7 @@ block content
 	form(id='user_form',method='post')
 		if !isAddForm
 			input(type='hidden', name='ids', value=ids)
-		div#alertbox.alert.alert-warning
+		div.row#alertbox.alert.alert-warning
 			text#message
 			a#closeAlert.close.btn.btn-sm(href='javascript:;')
 				i.fas.fa-times
@@ -18,6 +18,10 @@ block content
 			label.col-sm-2.col-form-label(for='password') Password
 			div.col-sm-10
 				input.form-control(type='password', id='password', placeholder='Password')
+		div.form-group.row
+			label.col-sm-2.col-form-label(for='confpassword') Confirm Password
+			div.col-sm-10
+				input.form-control(type='password', id='confpassword', placeholder='Confirm Password')
 		div.form-group.row
 			label.col-sm-2.col-form-label(for='fullname') Fullname
 			div.col-sm-10

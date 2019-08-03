@@ -24,6 +24,7 @@ function save(){
 		key : 'abcdh',
 		username: $('#username').val(),
 		password: $('#password').val(),
+		confpassword: $('#confpassword').val(),
 		fullname: $('#fullname').val()
 	}
 	xhqr('/api/user','POST',jsData,function(res,ret){
@@ -41,6 +42,7 @@ function update(){
 		key : 'abcdh',
 		username: $('#username').val(),
 		password: $('#password').val(),
+		confpassword: $('#confpassword').val(),
 		fullname: $('#fullname').val()
 	}
 	xhqr('/api/user/'+$('input[name=ids]').val(),'PUT',jsData,function(res,ret){

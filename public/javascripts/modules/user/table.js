@@ -144,7 +144,7 @@ function del(id){
     a = confirm('Are you sure want to delete ?');
     
     if(a){
-        xhqr('/api/user/'+id,'DELETE',{},function(res,ret){
+        xhqr('/api/user/'+id,'DELETE',{key :'abcdh'},function(res,ret){
             if(res.status === 'error'){
                 alert('can\'t delete data :' + res.message);
             }else{

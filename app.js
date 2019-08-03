@@ -12,6 +12,9 @@ mongoose.connect(dbConString + '/todos');
 
 var indexRouter = require('./routes/index');
 
+var loginRouter = require('./routes/login');
+var loginAPI = require('./routes/login/api');
+
 var userRouter = require('./routes/user');
 var userAPI = require('./routes/user/api');
 
@@ -54,7 +57,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/public',express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/', loginRouter);
+
+//app.use('/login', loginRouter);
+app.use('/api/login', loginAPI);
 
 app.use('/user', userRouter);
 app.use('/api/user', userAPI);

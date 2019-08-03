@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 
 const _layout = {
 	title : 'User Management'
@@ -28,6 +29,13 @@ router
 		_data = {..._layout, ..._Edit};
 		res.render('user/add',_data);
 	})
+
+	.get('/test',async (req,res,next)=>{
+		const salt = await bcrypt.genSalt(10);
+		const pwd = await bcrypt.hash('helloworld',salt);
+		res.send('hello '+ pwd);
+		
+	});
 ;
 
 module.exports = router;
