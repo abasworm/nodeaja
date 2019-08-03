@@ -1,0 +1,25 @@
+extends ../template/login_layout
+
+block content
+	.row
+		
+		.col-md-4
+		.col-md-4
+			h1=title
+			
+			form(id='user_form',method='post')
+				.row#alertbox.alert.alert-warning
+					text#message
+					a#closeAlert.close.btn.btn-sm(href='javascript:;')
+						i.fas.fa-times
+				.form-group.row
+					input.col-md-12.form-control(type='text',id='username',placeholder='Username')
+					
+				.form-group.row
+					input.col-md-12.form-control(type='password',id='password',placeholder='password')
+
+				a.btn.btn-primary(id='btn_login')
+					| Login
+		.col-md-4
+
+	script(src='/public/javascripts/modules/login.js') 
