@@ -1,6 +1,6 @@
 var table;
 $(document).ready(function() {
-	var link = "/api/user";
+	var link = "/api/departement";
 	//membuat footer menjadi field input
     $('#dt_table tfoot th').each(function () {
         var title = $('#dt_table thead th').eq($(this).index()).text();
@@ -108,8 +108,7 @@ $(document).ready(function() {
                     );
                 }
             },
-            {"data": "username"},
-            {"data": "fullname"}
+            {"data": "departement_name"}
                 
         ],
 
@@ -141,14 +140,14 @@ $(document).ready(function() {
 });
 
 function edit(id){
-    document.location = '/user/edit/'+id;
+    document.location = '/departement/edit/'+id;
 }
 
 function del(id){
     a = confirm('Are you sure want to delete ?');
     
     if(a){
-        xhqr('/api/user/'+id,'DELETE',{key :'abcdh'},function(res,ret){
+        xhqr('/api/departement/'+id,'DELETE',{key :'abcdh'},function(res,ret){
             if(res.status === 'error'){
                 alert('can\'t delete data :' + res.message);
             }else{

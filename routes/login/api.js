@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Joi = require('@hapi/joi');
 const bcrypt = require('bcryptjs');
+const JWT = require('jsonwebtoken');
 
 const sch = require('../../models/users');
 const JoiSchemaLogin = {
@@ -12,6 +13,7 @@ router
 	.get('/',(req,res,next)=>{
 		res.returnStatus(404);
 	})
+
 	.post('/check',(req,res,next)=>{
 		const newData = new sch();
 		const fields = {
@@ -36,11 +38,23 @@ router
 						'result' : 'Password / Username is Invalid'
 					});
 				const validPassword = await bcrypt.compare(fields.password, resultset.password);
+				const auth_token =  await JWT.sign({_id:resultset._id, fullname:resultset.fullname},process.env.TOKEN_SECRET_KEY, { expiresIn: '1h' });
 
 				if(validPassword){
-					res.json({
+
+					//session add
+					req.session._id = resultset._id;
+					req.session.username = resultset.username;
+					req.session.fullname = resultset.fullname;
+					req.session.token = auth_token;
+
+					//result
+					res
+					.header('auth_token', auth_token)
+					.json({
 						'status' : 'success',
-						'message' : 'login success',
+						'message' : 'login success',	
+						'token' : auth_token
 					});	
 				}else{
 					return res.json({
@@ -60,6 +74,15 @@ router
 			})
 			.error(console.error);
 		}
+	})
+	.get('/out',(req,res,next)=>{
+		req.session.destroy((err)=>{
+			if(err) return res.send(505);
+			res.json({
+				'status' : 'success',
+				'message': 'Sukses Logout'
+			});
+		})
 	});
 
 

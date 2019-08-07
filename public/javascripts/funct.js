@@ -5,7 +5,10 @@
         $.ajax({
             type: type,
             url: url,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            headers: {
+            	'Content-Type': 'application/x-www-form-urlencoded',
+            	'auth_token' : $('#keyAt').val()
+            },
             dataType: 'JSON',
             contentType:"application/json",
             data: data,

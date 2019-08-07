@@ -3,6 +3,7 @@ extends ../template/layout
 block content
 
 	h1=title
+	input(type='hidden',id='keyAt',value=token)
 	form(id='user_form',method='post')
 		if !isAddForm
 			input(type='hidden', name='ids', value=ids)

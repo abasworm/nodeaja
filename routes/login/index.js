@@ -8,7 +8,6 @@ const _layout = {
 router
 	.get('/',(req,res,next)=>{
 		res.render('login/index',_layout);
-	})
-	;
+	});
 
 module.exports = router;

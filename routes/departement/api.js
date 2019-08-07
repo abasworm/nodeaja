@@ -4,22 +4,20 @@ const Joi = require('@hapi/joi');
 const bcrypt = require('bcryptjs');
 const { isLogin, isAuth } = require('../../middleware/auth');
 
-const sch = require('../../models/users');
+const sch = require('../../models/departement');
 const JoiSchemaAdd = {
-	username : Joi.string().min(6).max(20).required(),
-	password : Joi.string().min(6).max(20).required(),
-	confpassword : Joi.string().min(6).max(20).required().valid(Joi.ref('password')),
-	fullname : Joi.string().min(4).max(30).required()
+	departement_name : Joi.string().max(200).required(),
+	departement_desc : Joi.string()
 };
 const JoiSchemaEdit = {
 	id : Joi.string().required(),
-	username : Joi.string().min(6).max(20).required(),
-	fullname : Joi.string().min(4).max(30).required()
+	departement_name : Joi.string().max(200).required(),
+	departement_desc : Joi.string() 
 };
 const fieldToShow = [
 	'_id',
-	'username',
-	'fullname'
+	'departement_name',
+	'departement_desc'
 ];
 
 
@@ -46,7 +44,7 @@ router
 			.error(console.error);
 	})
 
-	.get('/:id', isAuth, (req,res,next)=>{
+	.get('/:id', (req,res,next)=>{
 		sch.findOneAsync({_id: req.params.id})
 			.then((resultset)=>{
 				
@@ -70,21 +68,17 @@ router
 			.error(console.error);
 	})
 
-	.post('/', isAuth, async (req,res,next)=>{
+	.post('/', async (req,res,next)=>{
 		const newData = new sch();
 		const fields = {
-			'username' : req.body.username,
-			'password' : req.body.password,
-			'fullname' : req.body.fullname
+			'departement_name' : req.body.departement_name,
+			'departement_desc' : req.body.departement_desc
 		}
 		if(!req.body) return res.sendStatus(400);
 
 		const salt = await bcrypt.genSalt(10);
-		const pwd = await bcrypt.hash(req.body.password,salt);
 		Object.assign(newData,fields);
 
-		fields.confpassword = req.body.confpassword;
-		newData.password = pwd;
 
 		const { error, value} = Joi.validate(fields, JoiSchemaAdd);
 		if(error!==null){
@@ -115,7 +109,7 @@ router
 		.error(console.error);
 	})
 
-	.put('/:id', isAuth, async (req,res,next)=>{
+	.put('/:id',async (req,res,next)=>{
 		var fields = {};
 		var prop;
 		console.log(req.body);
@@ -123,16 +117,8 @@ router
 
 		//update
 		fields.id = req.params.id;
-		fields.username = req.body.username;
-		
-		if(req.body.password){
-			
-			fields.password = req.body.password;
-			fields.confpassword = req.body.confpassword;
-			JoiSchemaEdit.password = Joi.string().min(6).max(20).required();
-			JoiSchemaEdit.confpassword = Joi.string().min(6).max(20).required().valid(Joi.ref('password'));
-		}
-		fields.fullname = req.body.fullname;
+		fields.departement_name = req.body.departement_name;
+		fields.departement_desc = req.body.departement_desc;
 
 
 		//validate
@@ -147,15 +133,8 @@ router
 			});
 		}
 
-		if(req.body.password){
-			const salt = await bcrypt.genSalt(10);
-			const pwd = await bcrypt.hash(req.body.password,salt);
-			fields.password = pwd;	
-			delete fields.confpassword;
-		}
 		delete fields.id;
 		
-
 		sch.updateAsync({_id:req.params.id},fields)
 		.then((updatedResult)=>{
 			res.json({
@@ -173,7 +152,7 @@ router
 		;
 	})
 
-	.delete('/:id', isAuth, (req,res,next)=>{
+	.delete('/:id',(req,res,next)=>{
 		sch.findByIdAndRemoveAsync(req.params.id)
 		.then((deleteTodo)=>{
 			res.json({

@@ -1,27 +1,25 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var sassMiddleware = require('node-sass-middleware');
-var browserify = require('browserify-middleware'); 
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const logger = require('morgan');
+const sassMiddleware = require('node-sass-middleware');
+const browserify = require('browserify-middleware'); 
 const mongoose = require('mongoose');
-
 const dbConString = process.env.MONGODB_URI || 'mongodb://localhost:27017';
 mongoose.connect(dbConString + '/todos');
+const MongoStore = require('connect-mongo')(session);
 
-var indexRouter = require('./routes/index');
 
-var loginRouter = require('./routes/login');
-var loginAPI = require('./routes/login/api');
+const indexRouter = require('./routes/index');
+const loginRouter = require('./routes/login');const loginAPI = require('./routes/login/api');
+const userRouter = require('./routes/user');const userAPI = require('./routes/user/api');
+const departementRouter = require('./routes/departement');const departementAPI = require('./routes/departement/api');
+const todoRouter = require('./routes/todo/index');const todoAPI = require('./routes/todo/api');
 
-var userRouter = require('./routes/user');
-var userAPI = require('./routes/user/api');
 
-var todoRouter = require('./routes/todo/index');
-var todoAPI = require('./routes/todo/api');
-
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,6 +48,13 @@ if (app.get('env') == 'development') {
   app.use(require('connect-browser-sync')(bs));
 }
 
+app.use(session({
+	secret: process.env.SESSION_SECRET_KEY,
+	store: new MongoStore({
+		mongooseConnection: mongoose.connection,
+		ttl: 60 * 60 * 12// detik * menit * jam * hari * minggu
+	})
+}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -64,6 +69,9 @@ app.use('/api/login', loginAPI);
 
 app.use('/user', userRouter);
 app.use('/api/user', userAPI);
+
+app.use('/departement', departementRouter);
+app.use('/api/departement', departementAPI);
 
 app.use('/todo', todoRouter);
 app.use('/api/todo', todoAPI);

@@ -1,0 +1,30 @@
+extends ../template/layout
+
+block content
+
+	h1=title
+	input(type='hidden',id='keyAt',value=token)
+	form(id='user_form',method='post')
+		if !isAddForm
+			input(type='hidden', name='ids', value=ids)
+		div.row#alertbox.alert.alert-warning
+			text#message
+			a#closeAlert.close.btn.btn-sm(href='javascript:;')
+				i.fas.fa-times
+		div.form-group.row
+			label.col-sm-2.col-form-label(for='departement_name') Departement Name
+			div.col-sm-10
+				input.form-control(type='text',id='departement_name',placeholder='departement_name')
+		div.form-group.row
+			label.col-sm-2.col-form-label(for='departement_desc') Departement Description
+			div.col-sm-10
+				input.form-control(type='text', id='departement_desc', placeholder='departement_desc')
+		
+		div.form-group.row
+			div.col-sm-10
+				if isAddForm
+					a.btn.btn-primary(href='javascript:save();') Simpan
+				else
+					a.btn.btn-primary(href='javascript:update();') Update
+
+	script(src='/public/javascripts/modules/departement/form.js')
